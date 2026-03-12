@@ -1,12 +1,4 @@
-print("[eggsystem] loading...")
-
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TweenService = game:GetService("TweenService")
-local Debris = game:GetService("Debris")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local ServerScriptService = game:GetService("ServerScriptService")
-
+-- modules
 local BrainrotData = require(ReplicatedStorage:WaitForChild("BrainrotData"))
 local BrainrotPack = ReplicatedStorage:WaitForChild("Brainrot pack1")
 local EggData = require(script.Parent:WaitForChild("EggData"))
@@ -14,10 +6,12 @@ local EggSpawnSystem = require(script.Parent:WaitForChild("EggSpawnSystem"))
 local MoneyManager = require(ServerScriptService:WaitForChild("MoneyManager"))
 local DataStoreModule = require(ServerScriptService:WaitForChild("DataStoreModule"))
 
+-- config
 local PICKAXE_DAMAGE = 10000
 local DAMAGE_COOLDOWN = 0.2
 local BRAINROT_HEIGHT_OFFSET = 3
 
+-- runtime tables
 local eggs = {}
 local playerEggs = {}
 local swapParts = {}
@@ -26,12 +20,14 @@ local eggDamageCooldowns = {}
 local placedBrainrots = {}
 local PlayerData = {}
 
+-- get player rebirths
 local function getPlayerRebirths(userId)
 	if PlayerData[userId] then
 		return PlayerData[userId].Rebirths or 0
 	end
-	for i = 1, 5 do
-		local fullPlot = workspace:FindFirstChild("FullPlot" .. i, true)
+
+	for i = 1,5 do
+		local fullPlot = workspace:FindFirstChild("FullPlot"..i, true)
 		if fullPlot then
 			local plotSpawn = fullPlot:FindFirstChild("PlotSpawn", true)
 			if plotSpawn and plotSpawn:GetAttribute("OwnerId") == userId then
@@ -39,9 +35,11 @@ local function getPlayerRebirths(userId)
 			end
 		end
 	end
+
 	return 0
 end
 
+-- rebirth money multiplier
 local function getMoneyMultiplier(rebirths)
 	return 1 + rebirths
 end
